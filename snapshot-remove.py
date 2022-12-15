@@ -32,7 +32,7 @@ def scan_snapshots():
                 date = datetime.datetime.date(snapshot["StartTime"])
                 snapshot_date = date.strftime('%Y-%m-%d')
                 if snapshot_date != formated_final_date:
-                    print(formated_final_date)
+                    print("Removing snapshots from: "+formated_final_date)
                     
 
 
