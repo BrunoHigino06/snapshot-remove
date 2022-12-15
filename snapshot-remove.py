@@ -2,11 +2,14 @@ import boto3, json, datetime
 
 
 def scan_snapshots():
-    day = 8
-    month = 12
-    year = 2022
-    delta = 30
-    date_refence = datetime.datetime(year, month, day).strftime('%Y-%m-%d')
+    start_day = 15
+    start_month = 12
+    start_year = 2022
+    delta = 365
+    from_date = 30
+
+
+    reference_date = datetime.datetime(start_year, start_month, start_day)
     
     client = boto3.client('ec2', region_name='us-east-1')
     paginator = client.get_paginator('describe_snapshots')
@@ -20,11 +23,19 @@ def scan_snapshots():
         }
     )
     for snapshots in response_iterator:
-        while 
-        for snapshot in snapshots["Snapshots"]:
-            date = datetime.datetime.date(snapshot["StartTime"])
-            datestr = date.strftime('%Y-%m-%d')
-            if datestr == date_refence:
-                print(datestr)
+        while delta >= 0:
+            start_date = reference_date - datetime.timedelta(days=(from_date))
+            delta = delta -1
+            final_date = start_date - datetime.timedelta(days=(delta))
+            formated_final_date = final_date.strftime('%Y-%m-%d')
+            for snapshot in snapshots["Snapshots"]:
+                date = datetime.datetime.date(snapshot["StartTime"])
+                snapshot_date = date.strftime('%Y-%m-%d')
+                if snapshot_date != formated_final_date:
+                    print(formated_final_date)
+                    
+
+
+
 
 scan_snapshots()
