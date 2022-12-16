@@ -1,4 +1,4 @@
-import boto3, json, datetime
+import boto3, json, datetime, os
 
 
 def scan_snapshots():
@@ -6,7 +6,7 @@ def scan_snapshots():
     start_month = 12
     start_year = 2022
     delta = 365
-    from_date = 30
+    from_date = 0
 
 
     reference_date = datetime.datetime(start_year, start_month, start_day)
@@ -31,8 +31,12 @@ def scan_snapshots():
             for snapshot in snapshots["Snapshots"]:
                 date = datetime.datetime.date(snapshot["StartTime"])
                 snapshot_date = date.strftime('%Y-%m-%d')
-                if snapshot_date != formated_final_date:
-                    print("Removing snapshots from: "+formated_final_date)
+                if snapshot_date == formated_final_date:
+                    snapshotid = snapshot["SnapshotId"]
+                    print("Removing snapshot from: "+formated_final_date+" whith ID: "+snapshotid)
+                    os.system('aws ec2 delete-snapshot --snapshot-id '+snapshotid)
+
+
                     
 
 
